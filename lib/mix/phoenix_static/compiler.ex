@@ -10,14 +10,11 @@ defmodule Mix.PhoenixStatic.Compiler do
   end
 
   defp build_controller(pages, web_module, html_layout) do
-    pages_by_action = Enum.group_by(pages, & &1.action)
-
     quoted =
       quote(
         bind_quoted: [
           html_layout: html_layout,
           pages: Macro.escape(pages),
-          pages_by_action: Macro.escape(pages_by_action),
           web_module: web_module
         ]
       ) do
@@ -26,27 +23,10 @@ defmodule Mix.PhoenixStatic.Compiler do
             formats: [:html],
             layouts: [html: html_layout]
 
-          pages_by_action
-          |> Enum.flat_map(fn {action, _pages} ->
-            action_def =
-              def unquote(:"#{action}")(conn, _params) do
-                locale = Gettext.get_locale()
-                assigns = unquote(:"#{action}_assigns")(locale)
-
-                render(conn, "#{unquote(action)}_#{locale}.html", assigns)
-              end
-
-            assigns_def =
-              Enum.map(pages, fn page ->
-                %{action: action, locale: locale, assigns: assigns} = page
-                assigns = Macro.escape(assigns)
-
-                defp unquote(:"#{action}_assigns")(unquote(locale)) do
-                  unquote(assigns)
-                end
-              end)
-
-            [action_def, assigns_def]
+          Enum.map(pages, fn %{action: action, assigns: assigns} ->
+            def unquote(:"#{action}")(conn, _params) do
+              render(conn, "#{unquote(action)}.html", unquote(assigns))
+            end
           end)
         end
       end
@@ -60,8 +40,8 @@ defmodule Mix.PhoenixStatic.Compiler do
         defmodule :"#{web_module}.PhoenixStaticHTML" do
           import Phoenix.HTML, only: [raw: 1]
 
-          Enum.map(pages, fn %{action: action, locale: locale, content: content} ->
-            def unquote(:"#{action}_#{locale}")(_assigns) do
+          Enum.map(pages, fn %{action: action, content: content} ->
+            def unquote(:"#{action}")(_assigns) do
               raw(unquote(content))
             end
           end)
