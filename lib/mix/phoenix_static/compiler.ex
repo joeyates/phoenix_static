@@ -1,24 +1,17 @@
 defmodule Mix.PhoenixStatic.Compiler do
   def run() do
     html_layout = Application.fetch_env!(:phoenix_static, :html_layout)
-    web_module = Application.fetch_env!(:phoenix_static, :web_module)
     {method, function, arguments} = Application.fetch_env!(:phoenix_static, :page_source)
     pages = apply(method, function, arguments)
-    build_controller(pages, web_module, html_layout)
-    build_view(pages, web_module)
+    build_controller(pages, html_layout)
+    build_view(pages)
     :ok
   end
 
-  defp build_controller(pages, web_module, html_layout) do
+  defp build_controller(pages, html_layout) do
     quoted =
-      quote(
-        bind_quoted: [
-          html_layout: html_layout,
-          pages: Macro.escape(pages),
-          web_module: web_module
-        ]
-      ) do
-        defmodule :"#{web_module}.PhoenixStaticController" do
+      quote(bind_quoted: [html_layout: html_layout, pages: Macro.escape(pages)]) do
+        defmodule PhoenixStaticWeb.GeneratedController do
           use Phoenix.Controller,
             formats: [:html],
             layouts: [html: html_layout]
@@ -34,10 +27,10 @@ defmodule Mix.PhoenixStatic.Compiler do
     compile_module(quoted)
   end
 
-  defp build_view(pages, web_module) do
+  defp build_view(pages) do
     quoted =
-      quote(bind_quoted: [pages: Macro.escape(pages), web_module: web_module]) do
-        defmodule :"#{web_module}.PhoenixStaticHTML" do
+      quote(bind_quoted: [pages: Macro.escape(pages)]) do
+        defmodule PhoenixStaticWeb.GeneratedHTML do
           import Phoenix.HTML, only: [raw: 1]
 
           Enum.map(pages, fn %{action: action, content: content} ->
