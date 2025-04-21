@@ -3,5 +3,6 @@ defmodule PhoenixStatic.Page do
   This module defines the information structure used to build static pages.
   """
 
-  defstruct [:id, :action, :slug, :locale, :content, assigns: []]
+  @enforce_keys [:action, :path, :content]
+  defstruct [:action, :path, :content, :metadata, assigns: []]
 end
