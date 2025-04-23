@@ -3,6 +3,8 @@ defmodule TestProjectWeb.Router do
 
   require PhoenixStatic.Routes
 
+  def __mix_recompile__?(), do: true
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
