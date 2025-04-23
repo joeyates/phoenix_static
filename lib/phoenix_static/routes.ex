@@ -1,6 +1,25 @@
 defmodule PhoenixStatic.Routes do
   alias Phoenix.Router
 
+  @doc false
+  defmacro __using__(opts \\ %{}) do
+    pipelines = Keyword.get(opts, :pipelines, [])
+
+    quote do
+      require PhoenixStatic.Routes
+
+      def __mix_recompile__?(), do: true
+
+      scope "/" do
+        Enum.map(unquote(pipelines), fn pipeline ->
+          pipe_through pipeline
+        end)
+
+        PhoenixStatic.Routes.define()
+      end
+    end
+  end
+
   defmacro define do
     {method, function, arguments} = Application.fetch_env!(:phoenix_static, :page_source)
     pages = Macro.escape(apply(method, function, arguments))

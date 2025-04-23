@@ -8,6 +8,7 @@ defmodule PhoenixStatic.MixProject do
       elixir: "~> 1.17",
       deps: deps(),
       description: "Build static pages into a Phoenix application at compile time",
+      elixirc_paths: ["lib"],
       package: package(),
       start_permanent: Mix.env() == :prod
     ]
@@ -20,7 +21,10 @@ defmodule PhoenixStatic.MixProject do
   defp deps do
     [
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
-      {:phoenix, ">= 0.0.0"}
+      {:jason, ">= 0.0.0", only: :test},
+      {:phoenix, ">= 0.0.0"},
+      {:phoenix_html, "~> 4.1", only: :test},
+      {:phoenix_live_view, "~> 1.0.0-rc.1", only: :test}
     ]
   end
 
