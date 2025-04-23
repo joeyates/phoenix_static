@@ -1,0 +1,29 @@
+defmodule Mix.PhoenixStaticTest do
+  use ExUnit.Case, async: false
+
+  setup_all do
+    root = File.cwd!()
+    test_path = Path.join([root, "test", "integration", "test_project"])
+
+    File.cd!(test_path, fn ->
+      {_clean_output, 0} = System.cmd("git", ["clean", "-ffdx"])
+      {_deps_output, 0} = System.cmd("mix", ["deps.get"], stderr_to_stdout: true)
+      {_compile_output, 0} = System.cmd("mix", ["compile"], stderr_to_stdout: true)
+    end)
+
+    on_exit(fn ->
+      File.cd!(test_path, fn ->
+        {_clean_output, 0} = System.cmd("git", ["clean", "-ffdx"])
+      end)
+    end)
+
+    %{test_path: test_path}
+  end
+
+  test "it adds static routes", %{test_path: test_path} do
+    Mix.Project.in_project(:test_project, test_path, fn _module ->
+      {output, 0} = System.cmd("mix", ["phx.routes"], stderr_to_stdout: true)
+      assert output =~ ~r(GET\s+/about\s+PhoenixStaticWeb.GeneratedController\s+:about)
+    end)
+  end
+end
