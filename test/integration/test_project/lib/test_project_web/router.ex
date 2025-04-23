@@ -1,9 +1,7 @@
 defmodule TestProjectWeb.Router do
   use TestProjectWeb, :router
 
-  require PhoenixStatic.Routes
-
-  def __mix_recompile__?(), do: true
+  use PhoenixStatic.Routes, pipelines: [:browser]
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -18,11 +16,5 @@ defmodule TestProjectWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
-  end
-
-  scope "/" do
-    pipe_through :browser
-
-    PhoenixStatic.Routes.define()
   end
 end
