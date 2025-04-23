@@ -2,12 +2,9 @@ defmodule TestProject.Routes do
   alias PhoenixStatic.Page
 
   def list_pages() do
-    [
-      %Page{
-        action: "about",
-        path: "/about",
-        content: "<div>About Us</div>"
-      }
-    ]
+    "routes.json"
+    |> File.read!()
+    |> Jason.decode!(keys: :atoms)
+    |> Enum.map(&struct!(Page, &1))
   end
 end
