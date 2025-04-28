@@ -17,6 +17,8 @@ defmodule Mix.PhoenixStatic.Compiler do
             layouts: [html: html_layout]
 
           Enum.map(pages, fn %{action: action, assigns: assigns} ->
+            assigns = Macro.escape(assigns)
+
             def unquote(:"#{action}")(conn, _params) do
               render(conn, "#{unquote(action)}.html", unquote(assigns))
             end
