@@ -21,8 +21,8 @@ defmodule PhoenixStatic.Routes do
   end
 
   defmacro define do
-    {method, function, arguments} = Application.fetch_env!(:phoenix_static, :page_source)
-    pages = Macro.escape(apply(method, function, arguments))
+    {module, function, arguments} = Application.fetch_env!(:phoenix_static, :page_source)
+    pages = Macro.escape(apply(module, function, arguments))
 
     quote do
       Enum.map(unquote(pages), fn page ->
