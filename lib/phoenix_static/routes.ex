@@ -18,7 +18,7 @@ defmodule PhoenixStatic.Routes do
           pipe_through pipeline
         end)
 
-        Enum.map(pages, fn page ->
+        Enum.map(pages, fn {_action, page} ->
           options =
             if page.metadata do
               [metadata: page.metadata]

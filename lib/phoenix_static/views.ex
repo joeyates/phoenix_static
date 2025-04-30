@@ -1,15 +1,10 @@
 defmodule PhoenixStatic.Views do
   @doc false
   defmacro __using__(_opts \\ %{}) do
-    source = Application.fetch_env!(:phoenix_static, :source)
-
-    {:ok, pages} =
-      source
-      |> apply(:list_pages, [])
-      |> Macro.escape()
+    pages = Macro.escape(pages_by_action())
 
     quote bind_quoted: [pages: pages] do
-      Enum.map(pages, fn %{action: action, content: content} ->
+      Enum.map(pages, fn {action, %{content: content}} ->
         def unquote(String.to_atom(action))(_assigns) do
           raw(unquote(content))
         end
@@ -40,5 +35,23 @@ defmodule PhoenixStatic.Views do
         end
       end
     end
+  end
+
+  defp pages_by_action() do
+    {:ok, pages} = fetch_pages()
+    by_action(pages)
+  end
+
+  defp fetch_pages() do
+    source = Application.fetch_env!(:phoenix_static, :source)
+    {:ok, _pages} = apply(source, :list_pages, [])
+  end
+
+  defp by_action(pages) do
+    Enum.reduce(
+      pages,
+      %{},
+      fn page, acc -> Map.put(acc, page.action, page) end
+    )
   end
 end
