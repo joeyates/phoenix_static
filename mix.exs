@@ -4,7 +4,7 @@ defmodule PhoenixStatic.MixProject do
   def project do
     [
       app: :phoenix_static,
-      version: "0.3.0",
+      version: "0.3.1",
       elixir: "~> 1.17",
       deps: deps(),
       description: "Build static pages into a Phoenix application at compile time",
