@@ -1,6 +1,5 @@
 defmodule TestProjectWeb.Router do
   use TestProjectWeb, :router
-
   use PhoenixStatic.Routes, pipelines: [:browser]
 
   pipeline :browser do
