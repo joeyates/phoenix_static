@@ -8,7 +8,7 @@ defmodule PhoenixStatic.Views do
       |> apply(:list_pages, [])
       |> Macro.escape()
 
-    quote bind_quoted: [pages: pages], location: :keep do
+    quote bind_quoted: [pages: pages] do
       Enum.map(pages, fn %{action: action, content: content} ->
         def unquote(String.to_atom(action))(_assigns) do
           raw(unquote(content))
