@@ -4,9 +4,11 @@ defmodule PhoenixStatic.Views do
     pages = Macro.escape(pages_by_action())
 
     quote bind_quoted: [pages: pages] do
-      Enum.map(pages, fn {action, %{content: content}} ->
+      Enum.map(pages, fn {action, _page} ->
         def unquote(String.to_atom(action))(_assigns) do
-          Phoenix.HTML.raw(unquote(content))
+          __phoenix_static_pages__()
+          |> get_in([unquote(action), Access.key!(:content)])
+          |> Phoenix.HTML.raw()
         end
       end)
 
