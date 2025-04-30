@@ -3,7 +3,7 @@ defmodule PhoenixStatic.Views do
   defmacro __using__(_opts \\ %{}) do
     source = Application.fetch_env!(:phoenix_static, :source)
 
-    pages =
+    {:ok, pages} =
       source
       |> apply(:list_pages, [])
       |> Macro.escape()
@@ -21,7 +21,7 @@ defmodule PhoenixStatic.Views do
 
       def __mix_recompile__?() do
         source = Application.fetch_env!(:phoenix_static, :source)
-        source_last_modified = apply(source, :last_modified, [])
+        {:ok, source_last_modified} = apply(source, :last_modified, [])
 
         our_modified =
           Mix.Project.compile_path()

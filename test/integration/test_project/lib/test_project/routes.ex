@@ -10,6 +10,7 @@ defmodule TestProject.Routes do
     |> Map.get(:mtime)
     |> :calendar.datetime_to_gregorian_seconds()
     |> Kernel.-(62_167_219_200)
+    |> then(&{:ok, &1})
   end
 
   @impl true
@@ -18,5 +19,6 @@ defmodule TestProject.Routes do
     |> File.read!()
     |> Jason.decode!(keys: :atoms)
     |> Enum.map(&struct!(Page, &1))
+    |> then(&{:ok, &1})
   end
 end
