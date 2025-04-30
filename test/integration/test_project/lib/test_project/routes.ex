@@ -1,14 +1,18 @@
 defmodule TestProject.Routes do
+  @behaviour PhoenixStatic.Source
+
   alias PhoenixStatic.Page
 
+  @impl true
   def last_modified() do
     "routes.json"
     |> File.stat!()
     |> Map.get(:mtime)
-    |> NaiveDateTime.from_erl!()
-    |> DateTime.from_naive!("Etc/UTC")
+    |> :calendar.datetime_to_gregorian_seconds()
+    |> Kernel.-(62_167_219_200)
   end
 
+  @impl true
   def list_pages() do
     "routes.json"
     |> File.read!()

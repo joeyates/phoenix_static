@@ -1,11 +1,11 @@
 defmodule PhoenixStatic.Views do
   @doc false
   defmacro __using__(_opts \\ %{}) do
-    {module, function, arguments} = Application.fetch_env!(:phoenix_static, :page_source)
+    source = Application.fetch_env!(:phoenix_static, :source)
 
     pages =
-      module
-      |> apply(function, arguments)
+      source
+      |> apply(:list_pages, [])
       |> Macro.escape()
 
     quote bind_quoted: [pages: pages], location: :keep do
@@ -20,8 +20,8 @@ defmodule PhoenixStatic.Views do
       end
 
       def __mix_recompile__?() do
-        {module, function, arguments} = Application.fetch_env!(:phoenix_static, :last_modified)
-        source_last_modified = apply(module, function, arguments)
+        source = Application.fetch_env!(:phoenix_static, :source)
+        source_last_modified = apply(source, :last_modified, [])
 
         our_modified =
           Mix.Project.compile_path()
@@ -36,9 +36,7 @@ defmodule PhoenixStatic.Views do
             false
 
           {our_modified, source_last_modified} ->
-            unix_time = DateTime.to_unix(source_last_modified, :second)
-
-            our_modified < unix_time
+            our_modified < source_last_modified
         end
       end
     end
