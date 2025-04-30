@@ -6,7 +6,7 @@ defmodule PhoenixStatic.Views do
     quote bind_quoted: [pages: pages] do
       Enum.map(pages, fn {action, %{content: content}} ->
         def unquote(String.to_atom(action))(_assigns) do
-          raw(unquote(content))
+          Phoenix.HTML.raw(unquote(content))
         end
       end)
 
