@@ -3,42 +3,22 @@ defmodule PhoenixStatic.Routes do
 
   @doc false
   defmacro __using__(opts \\ %{}) do
-    controller = Keyword.fetch!(opts, :controller)
     pipelines = Keyword.get(opts, :pipelines, [])
 
-    {module, function, arguments} = Application.fetch_env!(:phoenix_static, :page_source)
-    pages = Macro.escape(apply(module, function, arguments))
+    controller = Application.fetch_env!(:phoenix_static, :controller)
+    Code.ensure_compiled!(controller)
+    view = Application.fetch_env!(:phoenix_static, :view)
+    Code.ensure_compiled!(view)
 
-    quote do
-      require PhoenixStatic.Routes
+    pages = Macro.escape(view.__phoenix_static_pages__())
 
-      def __mix_recompile__?() do
-        {module, function, arguments} = Application.fetch_env!(:phoenix_static, :last_modified)
-        cms_last_modified = apply(module, function, arguments)
-
-        ebin_path = Path.join(Mix.Project.compile_path(), "#{__MODULE__}.beam")
-        modified = Mix.Utils.last_modified(ebin_path)
-
-        case {modified, cms_last_modified} do
-          {0, _} ->
-            true
-
-          {_, nil} ->
-            false
-
-          {modified, last_modified} ->
-            unix_time = DateTime.to_unix(last_modified, :second)
-
-            modified < unix_time
-        end
-      end
-
+    quote bind_quoted: [pages: pages, controller: controller, pipelines: pipelines] do
       scope "/" do
-        Enum.map(unquote(pipelines), fn pipeline ->
+        Enum.map(pipelines, fn pipeline ->
           pipe_through pipeline
         end)
 
-        Enum.map(unquote(pages), fn page ->
+        Enum.map(pages, fn page ->
           options =
             if page.metadata do
               [metadata: page.metadata]
@@ -46,8 +26,25 @@ defmodule PhoenixStatic.Routes do
               []
             end
 
-          Router.get(page.path, unquote(controller), String.to_atom(page.action), options)
+          Router.get(page.path, controller, String.to_atom(page.action), options)
         end)
+      end
+
+      def __mix_recompile__?() do
+        view = Application.fetch_env!(:phoenix_static, :view)
+        Code.ensure_compiled!(view)
+
+        our_modified =
+          Mix.Project.compile_path()
+          |> Path.join("#{__MODULE__}.beam")
+          |> Mix.Utils.last_modified()
+
+        view_modified =
+          Mix.Project.compile_path()
+          |> Path.join("#{view}.beam")
+          |> Mix.Utils.last_modified()
+
+        our_modified < view_modified
       end
     end
   end
