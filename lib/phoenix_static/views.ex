@@ -17,7 +17,7 @@ defmodule PhoenixStatic.Views do
       end
 
       def __mix_recompile__?() do
-        PhoenixStatic.Views.newer_than_source?(__MODULE__)
+        PhoenixStatic.Views.older_than_source?(__MODULE__)
       end
     end
   end
@@ -40,7 +40,7 @@ defmodule PhoenixStatic.Views do
     )
   end
 
-  def newer_than_source?(module) do
+  def older_than_source?(module) do
     source = Application.fetch_env!(:phoenix_static, :source)
     {:ok, source_last_modified} = apply(source, :last_modified, [])
 
