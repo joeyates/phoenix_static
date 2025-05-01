@@ -17,7 +17,8 @@ defmodule PhoenixStatic.Views do
       end
 
       def __mix_recompile__?() do
-        PhoenixStatic.Views.older_than_source?(__MODULE__)
+        source_last_modified = PhoenixStatic.Views.source_last_modified()
+        PhoenixStatic.Dependencies.older_than_unix_timestamp?(__MODULE__, source_last_modified)
       end
     end
   end
@@ -40,24 +41,9 @@ defmodule PhoenixStatic.Views do
     )
   end
 
-  def older_than_source?(module) do
+  def source_last_modified() do
     source = Application.fetch_env!(:phoenix_static, :source)
     {:ok, source_last_modified} = apply(source, :last_modified, [])
-
-    our_modified =
-      Mix.Project.compile_path()
-      |> Path.join("#{module}.beam")
-      |> Mix.Utils.last_modified()
-
-    case {our_modified, source_last_modified} do
-      {0, _} ->
-        true
-
-      {_, nil} ->
-        false
-
-      {our_modified, source_last_modified} ->
-        our_modified < source_last_modified
-    end
+    source_last_modified
   end
 end
