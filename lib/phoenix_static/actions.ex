@@ -19,17 +19,7 @@ defmodule PhoenixStatic.Actions do
         view = Application.fetch_env!(:phoenix_static, :view)
         Code.ensure_compiled!(view)
 
-        our_modified =
-          Mix.Project.compile_path()
-          |> Path.join("#{__MODULE__}.beam")
-          |> Mix.Utils.last_modified()
-
-        view_modified =
-          Mix.Project.compile_path()
-          |> Path.join("#{view}.beam")
-          |> Mix.Utils.last_modified()
-
-        our_modified < view_modified
+        PhoenixStatic.Dependencies.older_than_module?(__MODULE__, view)
       end
     end
   end
