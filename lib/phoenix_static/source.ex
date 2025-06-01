@@ -20,7 +20,7 @@ defmodule PhoenixStatic.Source do
   If the source has changed, the view, along with the related controller and
   the project's router module, will be recompiled.
 
-  Thsi function should be as fast, reliable and lightweight as possible as it
+  This function should be as fast, reliable and lightweight as possible as it
   is called on each compilation. Above all, in development mode, it will
   be called on each request.
   """
