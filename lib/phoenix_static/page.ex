@@ -4,13 +4,12 @@ defmodule PhoenixStatic.Page do
   """
 
   @enforce_keys [:action, :path, :content]
-  defstruct [:action, :path, :content, :metadata, assigns: []]
+  defstruct [:action, :path, :content, route_options: []]
 
   @type t() :: %__MODULE__{
           action: String.t(),
           path: String.t(),
           content: String.t(),
-          metadata: map() | nil,
-          assigns: list()
+          route_options: list()
         }
 end

@@ -19,14 +19,7 @@ defmodule PhoenixStatic.Routes do
         end)
 
         Enum.map(pages, fn {_action, page} ->
-          options =
-            if page.metadata do
-              [metadata: page.metadata]
-            else
-              []
-            end
-
-          Router.get(page.path, controller, String.to_atom(page.action), options)
+          Router.get(page.path, controller, String.to_atom(page.action), page.route_options)
         end)
       end
 

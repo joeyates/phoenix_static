@@ -12,7 +12,14 @@ defmodule PhoenixStatic.Integration.RouterTest do
 
     @impl true
     def list_pages() do
-      {:ok, [%Page{action: "about", path: "/about", content: "<div>About</div>"}]}
+      page = %Page{
+        action: "about",
+        path: "/about",
+        content: "<div>About</div>",
+        route_options: [assigns: %{page_title: "Page title from assigns"}]
+      }
+
+      {:ok, [page]}
     end
 
     @impl true
@@ -29,10 +36,27 @@ defmodule PhoenixStatic.Integration.RouterTest do
 
   Application.put_env(:phoenix_static, :view, IntegrationHTML)
 
+  defmodule IntegrationLayout do
+    def app(%{conn: conn, inner_content: {:safe, inner_content}}) do
+      rendered = """
+      <html>
+        <head>
+          <title>#{conn.assigns.page_title}</title>
+        </head>
+        <body>
+          #{inner_content}
+        </body>
+      </html>
+      """
+
+      {:safe, rendered}
+    end
+  end
+
   defmodule IntegrationController do
     use Phoenix.Controller,
       formats: [:html],
-      layouts: [html: false]
+      layouts: [html: IntegrationLayout]
 
     use PhoenixStatic.Actions
   end
@@ -45,7 +69,6 @@ defmodule PhoenixStatic.Integration.RouterTest do
 
     pipeline :browser do
       plug :accepts, ["html"]
-      plug :put_layout, html: false
     end
   end
 
@@ -56,5 +79,14 @@ defmodule PhoenixStatic.Integration.RouterTest do
       |> IntegrationRouter.call([])
 
     assert html_response(conn, 200) =~ "About"
+  end
+
+  test "it accepts assigns in Page.route_options" do
+    conn =
+      :get
+      |> conn("/about")
+      |> IntegrationRouter.call([])
+
+    assert html_response(conn, 200) =~ "<title>Page title from assigns</title>"
   end
 end

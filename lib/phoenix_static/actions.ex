@@ -7,11 +7,9 @@ defmodule PhoenixStatic.Actions do
     pages = Macro.escape(view.__phoenix_static_pages__())
 
     quote bind_quoted: [pages: pages] do
-      Enum.map(pages, fn {action, %{assigns: assigns}} ->
-        assigns = Macro.escape(assigns)
-
+      Enum.map(pages, fn {action, _page} ->
         def unquote(String.to_atom(action))(conn, _params) do
-          render(conn, "#{unquote(action)}.html", unquote(assigns))
+          render(conn, "#{unquote(action)}.html")
         end
       end)
 
