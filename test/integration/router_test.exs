@@ -3,6 +3,7 @@ defmodule PhoenixStatic.Integration.RouterTest do
 
   import Plug.Test
   import Plug.Conn
+  import Phoenix.ConnTest
 
   defmodule IntegrationSource do
     @behaviour PhoenixStatic.Source
@@ -47,8 +48,6 @@ defmodule PhoenixStatic.Integration.RouterTest do
       plug :put_layout, html: false
     end
   end
-
-  import Phoenix.ConnTest
 
   test "it generates routes" do
     conn =
