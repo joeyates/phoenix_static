@@ -1,5 +1,7 @@
 # PhoenixStatic
 
+![Version](https://img.shields.io/hexpm/v/phoenix_static)
+
 Build static pages into a Phoenix application at compile time.
 
 # About
@@ -15,7 +17,7 @@ To use this library, you need to add it to your `mix.exs` file:
 ```elixir
 defp deps do
   [
-    {:phoenix_static, "~> 0.3.0"}
+    {:phoenix_static, "~> (see the badge above)"}
   ]
 end
 ```
