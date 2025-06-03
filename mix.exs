@@ -21,6 +21,7 @@ defmodule PhoenixStatic.MixProject do
   defp deps do
     [
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
+      {:green, "~> 0.1.4", only: :dev},
       {:jason, ">= 0.0.0", only: :test},
       {:phoenix, ">= 0.0.0"},
       {:phoenix_html, "~> 4.1", only: :test},
