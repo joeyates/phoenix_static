@@ -19,7 +19,7 @@ defmodule PhoenixStatic.Views do
       def __mix_recompile__?() do
         source = Application.fetch_env!(:phoenix_static, :source)
         source_module_changed = PhoenixStatic.Dependencies.older_than_module?(__MODULE__, source)
-        source_last_modified = PhoenixStatic.Views.source_last_modified()
+        source_last_modified = PhoenixStatic.Views.content_last_modified()
 
         source_data_changed =
           PhoenixStatic.Dependencies.older_than_unix_timestamp?(__MODULE__, source_last_modified)
@@ -27,6 +27,12 @@ defmodule PhoenixStatic.Views do
         source_module_changed or source_data_changed
       end
     end
+  end
+
+  def content_last_modified() do
+    source = Application.fetch_env!(:phoenix_static, :source)
+    {:ok, content_last_modified} = apply(source, :last_modified, [])
+    content_last_modified
   end
 
   defp pages_by_action() do
@@ -45,11 +51,5 @@ defmodule PhoenixStatic.Views do
       %{},
       fn page, acc -> Map.put(acc, page.action, page) end
     )
-  end
-
-  def source_last_modified() do
-    source = Application.fetch_env!(:phoenix_static, :source)
-    {:ok, source_last_modified} = apply(source, :last_modified, [])
-    source_last_modified
   end
 end
