@@ -10,7 +10,7 @@ defmodule PhoenixStatic.Dependencies do
   def older_than_unix_timestamp?(_module, nil), do: false
 
   def older_than_unix_timestamp?(module, last_modified) do
-    module_modified = last_modified(module)
+    module_modified = module_last_modified(module)
 
     if module_modified == 0 do
       true
@@ -20,8 +20,8 @@ defmodule PhoenixStatic.Dependencies do
   end
 
   def older_than_module?(module_1, module_2) do
-    module_1_modified = last_modified(module_1)
-    module_2_modified = last_modified(module_2)
+    module_1_modified = module_last_modified(module_1)
+    module_2_modified = module_last_modified(module_2)
 
     case {module_1_modified, module_2_modified} do
       {0, _} -> true
@@ -30,7 +30,7 @@ defmodule PhoenixStatic.Dependencies do
     end
   end
 
-  def last_modified(module) do
+  def module_last_modified(module) do
     Mix.Project.compile_path()
     |> Path.join("#{module}.beam")
     |> Mix.Utils.last_modified()
