@@ -15,9 +15,14 @@ defmodule PhoenixStatic.Actions do
 
       def __mix_recompile__?() do
         view = Application.fetch_env!(:phoenix_static, :view)
-        Code.ensure_compiled!(view)
 
-        PhoenixStatic.Dependencies.older_than_module?(__MODULE__, view)
+        case Code.ensure_compiled(view) do
+          {:module, _module} ->
+            PhoenixStatic.Dependencies.older_than_module?(__MODULE__, view)
+
+          {:error, _reason} ->
+            true
+        end
       end
     end
   end

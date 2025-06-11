@@ -18,13 +18,25 @@ defmodule PhoenixStatic.Views do
 
       def __mix_recompile__?() do
         source = Application.fetch_env!(:phoenix_static, :source)
-        source_module_changed = PhoenixStatic.Dependencies.older_than_module?(__MODULE__, source)
-        source_last_modified = PhoenixStatic.Views.content_last_modified()
 
-        source_data_changed =
-          PhoenixStatic.Dependencies.older_than_unix_timestamp?(__MODULE__, source_last_modified)
+        case Code.ensure_compiled(source) do
+          {:module, _module} ->
+            source_module_changed =
+              PhoenixStatic.Dependencies.older_than_module?(__MODULE__, source)
 
-        source_module_changed or source_data_changed
+            source_last_modified = PhoenixStatic.Views.content_last_modified()
+
+            source_data_changed =
+              PhoenixStatic.Dependencies.older_than_unix_timestamp?(
+                __MODULE__,
+                source_last_modified
+              )
+
+            source_module_changed or source_data_changed
+
+          {:error, _reason} ->
+            true
+        end
       end
     end
   end
