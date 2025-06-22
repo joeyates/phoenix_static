@@ -82,4 +82,4 @@ All page content is currently held in memory during compilation, so it is not
 suitable for large amounts of data.
 
 The data is saved in the HTML view module, and is available via the
-`__phoenix_static_pages__/1` function.
+`__phoenix_static_pages__/0` function.
