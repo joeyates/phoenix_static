@@ -44,24 +44,25 @@ end
 ```
 
 Now, implement a pair of modules, a controller and an HTML view.
-The modules names **must** be `...Controller` and `...HTML`.
+The modules names **must** have the same base, i.e. `MyPages`
+and end in `...Controller` and `...HTML`, as is normal in Phoenix.
 
 The controller handles the requests for the static pages, and hands off
 to the HTML view which renders the content.
 
 ```elixir
-defmodule MyAppWeb.MyPageController do
+defmodule MyAppWeb.MyPagesController do
   use MyAppWeb, :controller
-  use PhoenixStatic.Actions
+  use PhoenixStatic.Controller
 end
 ```
 
 The view needs to know about the source module you created earlier, so you need to specify the `source` option.
 
 ```elixir
-defmodule MyAppWeb.MyPageHTML do
+defmodule MyAppWeb.MyPagesHTML do
   use MyAppWeb, :html
-  use PhoenixStatic.Views, source: MyAppWeb.Static
+  use PhoenixStatic.View, source: MyAppWeb.Static
 end
 ```
 
@@ -70,7 +71,7 @@ Finally, connect the controller to the router:
 ```elixir
 defmodule MyAppWeb.Router do
   ...
-  use PhoenixStatic.Routes, controllers: [MyAppWeb.MyPageController], pipelines: [:browser]
+  use PhoenixStatic.Routes, controllers: [MyAppWeb.MyPagesController], pipelines: [:browser]
   ...
 end
 ```

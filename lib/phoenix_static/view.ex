@@ -1,4 +1,4 @@
-defmodule PhoenixStatic.Views do
+defmodule PhoenixStatic.View do
   @doc false
   defmacro __using__(opts) do
     quoted_source = Keyword.fetch!(opts, :source)
@@ -26,7 +26,7 @@ defmodule PhoenixStatic.Views do
             source_module_changed =
               PhoenixStatic.Dependencies.older_than_module?(__MODULE__, source)
 
-            source_last_modified = PhoenixStatic.Views.content_last_modified(source)
+            source_last_modified = PhoenixStatic.View.content_last_modified(source)
 
             source_data_changed =
               PhoenixStatic.Dependencies.older_than_unix_timestamp?(

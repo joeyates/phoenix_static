@@ -1,4 +1,4 @@
-defmodule PhoenixStatic.Actions do
+defmodule PhoenixStatic.Controller do
   @doc false
   defmacro __using__(_opts \\ %{}) do
     controller = __CALLER__.module
@@ -17,7 +17,7 @@ defmodule PhoenixStatic.Actions do
       end)
 
       def __mix_recompile__?() do
-        view = PhoenixStatic.Actions.view_for(__MODULE__)
+        view = PhoenixStatic.Controller.view_for(__MODULE__)
         PhoenixStatic.Dependencies.should_recompile?(__MODULE__, unquote(view))
       end
     end

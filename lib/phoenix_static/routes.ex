@@ -12,7 +12,7 @@ defmodule PhoenixStatic.Routes do
         controller = Macro.expand(quoted_controller, __CALLER__)
         Code.ensure_compiled!(controller)
 
-        view = PhoenixStatic.Actions.view_for(controller)
+        view = PhoenixStatic.Controller.view_for(controller)
         Code.ensure_compiled!(view)
 
         [controller, view, view.__phoenix_static_pages__()]
