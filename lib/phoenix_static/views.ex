@@ -61,7 +61,13 @@ defmodule PhoenixStatic.Views do
     Enum.reduce(
       pages,
       %{},
-      fn page, acc -> Map.put(acc, page.action, page) end
+      fn page, acc ->
+        if Map.has_key?(acc, page.action) do
+          raise "Duplicate action found: #{page.action} in #{inspect(page.path)}"
+        end
+
+        Map.put(acc, page.action, page)
+      end
     )
   end
 end
