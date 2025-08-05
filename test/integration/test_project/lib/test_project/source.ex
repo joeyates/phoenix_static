@@ -1,4 +1,4 @@
-defmodule TestProject.Routes do
+defmodule TestProject.Source do
   @behaviour PhoenixStatic.Source
 
   alias PhoenixStatic.Page
