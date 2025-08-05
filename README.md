@@ -70,10 +70,7 @@ end
 Then, you need to configure it in your `config/config.exs` file:
 
 ```elixir
-config :phoenix_static,
-  source: MyAppWeb.Static,
-  controller: MyAppWeb.MyPageController,
-  view: MyAppWeb.MyPageHTML
+config :phoenix_static, controllers: [MyAppWeb.MyPageController]
 ```
 
 # Further Information
