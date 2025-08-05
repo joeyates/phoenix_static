@@ -1,4 +1,4 @@
 defmodule TestProjectWeb.GeneratedRoutesController do
   use TestProjectWeb, :controller
-  use PhoenixStatic.Actions
+  use PhoenixStatic.Controller
 end

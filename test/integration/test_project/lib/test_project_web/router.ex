@@ -1,6 +1,9 @@
 defmodule TestProjectWeb.Router do
   use TestProjectWeb, :router
-  use PhoenixStatic.Routes, pipelines: [:browser]
+
+  use PhoenixStatic.Routes,
+    controllers: [TestProjectWeb.GeneratedRoutesController],
+    pipelines: [:browser]
 
   pipeline :browser do
     plug :accepts, ["html"]

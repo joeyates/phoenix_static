@@ -2,10 +2,20 @@ defmodule PhoenixStatic.Dependencies do
   @moduledoc """
   Conveniences for working with dependencies.
 
-  In this module, "older" means "needs recompiling when considering...".
+  In this module, "older" means "was compiled before...".
   So, if we compare a first module to a module that doesn't exist,
   the first module doesn't need recompiling, so it's not "older".
   """
+
+  def should_recompile?(module, other) do
+    case Code.ensure_compiled(module) do
+      {:module, _module} ->
+        older_than_module?(module, other)
+
+      {:error, _reason} ->
+        true
+    end
+  end
 
   def older_than_unix_timestamp?(_module, nil), do: false
 

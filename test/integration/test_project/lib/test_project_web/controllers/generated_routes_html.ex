@@ -1,4 +1,4 @@
 defmodule TestProjectWeb.GeneratedRoutesHTML do
   use TestProjectWeb, :html
-  use PhoenixStatic.Views
+  use PhoenixStatic.View, source: TestProject.Source
 end

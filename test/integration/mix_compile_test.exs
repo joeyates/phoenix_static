@@ -1,4 +1,4 @@
-defmodule Mix.PhoenixStaticTest do
+defmodule Mix.CompileTest do
   use ExUnit.Case, async: false
 
   setup_all do

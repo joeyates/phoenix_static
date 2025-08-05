@@ -22,7 +22,7 @@ defp deps do
 end
 ```
 
-Then you need to implement the `PhoenixStatic.Source` behaviour in a module.
+Next, implement the `PhoenixStatic.Source` behaviour in a module.
 This module will be responsible for fetching the content and providing the last modification date.
 
 ```elixir
@@ -43,38 +43,45 @@ defmodule MyAppWeb.Static do
 end
 ```
 
-Now, inject the static pages into the router, a Controller and its HTML View:
+Now, implement a pair of modules, a controller and an HTML view.
+The modules names **must** have the same base, i.e. `MyPages`
+and end in `...Controller` and `...HTML`, as is normal in Phoenix.
+
+The controller handles the requests for the static pages, and hands off
+to the HTML view which renders the content.
+
+```elixir
+defmodule MyAppWeb.MyPagesController do
+  use MyAppWeb, :controller
+  use PhoenixStatic.Controller
+end
+```
+
+The view needs to know about the source module you created earlier, so you need to specify the `source` option.
+
+```elixir
+defmodule MyAppWeb.MyPagesHTML do
+  use MyAppWeb, :html
+  use PhoenixStatic.View, source: MyAppWeb.Static
+end
+```
+
+Finally, connect the controller to the router:
 
 ```elixir
 defmodule MyAppWeb.Router do
   ...
-  use PhoenixStatic.Routes, pipelines: [:browser]
-  ...
-end
-
-defmodule MyAppWeb.MyPageController do
-  use MyAppWeb, :controller
-  use PhoenixStatic.Actions
-
-  ...
-end
-
-defmodule MyAppWeb.MyPageHTML do
-  use MyAppWeb, :html
-  use PhoenixStatic.Views
-
+  use PhoenixStatic.Routes, controllers: [MyAppWeb.MyPagesController], pipelines: [:browser]
   ...
 end
 ```
 
-Then, you need to configure it in your `config/config.exs` file:
+All the routes indicated by your `PhoenixStatic.Source` implementation will be
+automatically generated.
 
-```elixir
-config :phoenix_static,
-  source: MyAppWeb.Static,
-  controller: MyAppWeb.MyPageController,
-  view: MyAppWeb.MyPageHTML
-```
+Note that you need to use `:pipelines` to indicate the same pipelines you would with normal Phoenix routes.
+
+You can add as many controllers (and views and sources) as you like.
 
 # Further Information
 
