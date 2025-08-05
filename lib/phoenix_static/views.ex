@@ -24,7 +24,7 @@ defmodule PhoenixStatic.Views do
             source_module_changed =
               PhoenixStatic.Dependencies.older_than_module?(__MODULE__, source)
 
-            source_last_modified = PhoenixStatic.Views.content_last_modified()
+            source_last_modified = PhoenixStatic.Views.content_last_modified(source)
 
             source_data_changed =
               PhoenixStatic.Dependencies.older_than_unix_timestamp?(
@@ -41,8 +41,7 @@ defmodule PhoenixStatic.Views do
     end
   end
 
-  def content_last_modified() do
-    source = Application.fetch_env!(:phoenix_static, :source)
+  def content_last_modified(source) do
     {:ok, content_last_modified} = apply(source, :last_modified, [])
     content_last_modified
   end
