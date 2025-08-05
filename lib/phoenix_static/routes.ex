@@ -4,39 +4,39 @@ defmodule PhoenixStatic.Routes do
   @doc false
   defmacro __using__(opts \\ %{}) do
     pipelines = Keyword.get(opts, :pipelines, [])
+    controllers = Keyword.fetch!(opts, :controllers)
 
     controller_view_pages =
-      :phoenix_static
-      |> Application.fetch_env!(:controllers)
-      |> Enum.map(fn controller ->
+      controllers
+      |> Enum.map(fn quoted_controller ->
+        controller = Macro.expand(quoted_controller, __CALLER__)
         Code.ensure_compiled!(controller)
-        view = PhoenixStatic.Actions.html_view(controller)
+
+        view = PhoenixStatic.Actions.view_for(controller)
         Code.ensure_compiled!(view)
 
-        {controller, view, view.__phoenix_static_pages__()}
+        [controller, view, view.__phoenix_static_pages__()]
       end)
       |> Macro.escape()
 
-    quote bind_quoted: [controller_view_pages: controller_view_pages, pipelines: pipelines] do
+    quote do
       scope "/" do
-        pipe_throughs =
-          Enum.map(pipelines, fn pipeline ->
-            pipe_through pipeline
-          end)
+        Enum.map(unquote(pipelines), fn pipeline ->
+          pipe_through pipeline
+        end)
 
-        routes =
-          Enum.flat_map(controller_view_pages, fn {controller, _view, pages} ->
-            Enum.map(pages, fn {_action, page} ->
-              Router.get(page.path, controller, String.to_atom(page.action), page.route_options)
-            end)
+        Enum.flat_map(unquote(controller_view_pages), fn [controller, _view, pages] ->
+          Enum.map(pages, fn {_action, page} ->
+            Router.get(page.path, controller, String.to_atom(page.action), page.route_options)
           end)
-
-        pipe_throughs ++ routes
+        end)
       end
 
       def __mix_recompile__?() do
-        Enum.any?(view_pages, fn {view, _pages} ->
-          PhoenixStatic.Actions.should_recompile?(view, __MODULE__)
+        controller_view_pages = unquote(controller_view_pages)
+
+        Enum.any?(controller_view_pages, fn [_controller, view, _pages] ->
+          PhoenixStatic.Dependencies.should_recompile?(__MODULE__, view)
         end)
       end
     end
