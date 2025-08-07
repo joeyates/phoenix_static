@@ -1,12 +1,12 @@
-defmodule PhoenixStaticStrapiExampleWeb.ErrorHTML do
-  use PhoenixStaticStrapiExampleWeb, :html
+defmodule StrapiWeb.ErrorHTML do
+  use StrapiWeb, :html
 
   # If you want to customize your error pages,
   # uncomment the embed_templates/1 call below
   # and add pages to the error directory:
   #
-  # * lib/phoenix_static_strapi_example_web/controllers/error_html/404.html.heex
-  # * lib/phoenix_static_strapi_example_web/controllers/error_html/500.html.heex
+  # * lib/strapi_web/controllers/error_html/404.html.heex
+  # * lib/strapi_web/controllers/error_html/500.html.heex
   #
   # embed_templates "error_html/*"
 

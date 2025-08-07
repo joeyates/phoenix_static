@@ -1,4 +1,4 @@
-defmodule PhoenixStaticStrapiExampleWeb.BlogHTML do
+defmodule StrapiWeb.BlogHTML do
   @moduledoc """
   HTML view for blog pages generated from Strapi CMS.
   
@@ -6,6 +6,6 @@ defmodule PhoenixStaticStrapiExampleWeb.BlogHTML do
   generate view functions for all pages defined in the StrapiSource module.
   """
   
-  use PhoenixStaticStrapiExampleWeb, :html
-  use PhoenixStatic.View, source: PhoenixStaticStrapiExampleWeb.StrapiSource
+  use StrapiWeb, :html
+  use PhoenixStatic.View, source: StrapiWeb.StrapiSource
 end

@@ -1,12 +1,12 @@
-defmodule PhoenixStaticStrapiExampleWeb.Endpoint do
-  use Phoenix.Endpoint, otp_app: :phoenix_static_strapi_example
+defmodule StrapiWeb.Endpoint do
+  use Phoenix.Endpoint, otp_app: :strapi
 
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
   # Set :encryption_salt if you would also like to encrypt it.
   @session_options [
     store: :cookie,
-    key: "_phoenix_static_strapi_example_key",
+    key: "_strapi_key",
     signing_salt: "JKx5xHYA",
     same_site: "Lax"
   ]

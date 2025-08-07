@@ -1,4 +1,4 @@
-defmodule PhoenixStaticStrapiExampleWeb.ConnCase do
+defmodule StrapiWeb.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -13,14 +13,14 @@ defmodule PhoenixStaticStrapiExampleWeb.ConnCase do
   using do
     quote do
       # The default endpoint for testing
-      @endpoint PhoenixStaticStrapiExampleWeb.Endpoint
+      @endpoint StrapiWeb.Endpoint
 
-      use PhoenixStaticStrapiExampleWeb, :verified_routes
+      use StrapiWeb, :verified_routes
 
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
-      import PhoenixStaticStrapiExampleWeb.ConnCase
+      import StrapiWeb.ConnCase
     end
   end
 

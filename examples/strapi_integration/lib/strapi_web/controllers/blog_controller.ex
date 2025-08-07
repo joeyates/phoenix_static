@@ -1,4 +1,4 @@
-defmodule PhoenixStaticStrapiExampleWeb.BlogController do
+defmodule StrapiWeb.BlogController do
   @moduledoc """
   Controller for handling blog-related static pages generated from Strapi CMS.
   
@@ -6,6 +6,6 @@ defmodule PhoenixStaticStrapiExampleWeb.BlogController do
   generate controller actions for all pages defined in the StrapiSource module.
   """
   
-  use PhoenixStaticStrapiExampleWeb, :controller
+  use StrapiWeb, :controller
   use PhoenixStatic.Controller
 end

@@ -1,4 +1,4 @@
-defmodule PhoenixStaticStrapiExampleWeb.Telemetry do
+defmodule StrapiWeb.Telemetry do
   use Supervisor
   import Telemetry.Metrics
 

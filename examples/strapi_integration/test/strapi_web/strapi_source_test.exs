@@ -1,6 +1,6 @@
-defmodule PhoenixStaticStrapiExampleWeb.StrapiSourceTest do
+defmodule StrapiWeb.StrapiSourceTest do
   use ExUnit.Case
-  alias PhoenixStaticStrapiExampleWeb.StrapiSource
+  alias StrapiWeb.StrapiSource
 
   describe "last_modified/0" do
     test "returns a unix timestamp" do

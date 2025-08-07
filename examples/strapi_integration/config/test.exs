@@ -2,7 +2,7 @@ import Config
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
-config :phoenix_static_strapi_example, PhoenixStaticStrapiExampleWeb.Endpoint,
+config :strapi, StrapiWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4002],
   secret_key_base: "eCM9MJfvb+T6TXdK6sRxqBCQjkkm5TL6jbLp7a8KjTHG6XmKQcJrJjZKs4R8D7qe",
   server: false
@@ -11,7 +11,7 @@ config :phoenix_static_strapi_example, PhoenixStaticStrapiExampleWeb.Endpoint,
 config :logger, level: :warning
 
 # Use a mock Strapi URL for tests
-config :phoenix_static_strapi_example,
+config :strapi,
   strapi_url: "http://localhost:9999"
 
 # Initialize plugs at runtime for faster test compilation
