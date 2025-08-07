@@ -1,0 +1,7 @@
+# Strapi Integration Example Application
+
+/config/
+/lib/
+/priv/
+.env.example
+README.md

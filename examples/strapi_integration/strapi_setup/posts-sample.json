@@ -1,0 +1,26 @@
+[
+  {
+    "title": "Getting Started with Phoenix and PhoenixStatic",
+    "slug": "getting-started-phoenix-static",
+    "content": "<h2>Introduction</h2><p>Phoenix is a productive web framework that does not compromise speed or maintainability. PhoenixStatic extends Phoenix by allowing you to generate static pages at compile time from external content sources like CMSs.</p><h2>Why Static Generation?</h2><p>Static generation offers several benefits:</p><ul><li>Improved performance - pages are pre-rendered</li><li>Better SEO - search engines can easily crawl static content</li><li>Reduced server load - no database queries at runtime</li><li>Enhanced security - fewer attack vectors</li></ul><h2>Integration with Strapi</h2><p>This example demonstrates how to use Strapi CMS as a content source for PhoenixStatic. Content is fetched during compilation and converted into optimized static HTML pages.</p>",
+    "publishedAt": "2024-01-15T10:00:00.000Z"
+  },
+  {
+    "title": "Building Scalable Web Applications with Elixir",
+    "slug": "scalable-web-apps-elixir", 
+    "content": "<h2>The Power of Elixir</h2><p>Elixir is a dynamic, functional language designed for building maintainable and scalable applications. Built on top of the Erlang Virtual Machine (BEAM), Elixir leverages the Actor model to achieve massive concurrency.</p><h2>Key Features</h2><ul><li>Fault tolerance through supervision trees</li><li>Lightweight processes (not OS threads)</li><li>Hot code swapping</li><li>Distributed computing support</li></ul><h2>Phoenix Framework</h2><p>Phoenix brings the best of both worlds - the productivity of Ruby on Rails with the performance and reliability of Elixir.</p>",
+    "publishedAt": "2024-01-10T14:30:00.000Z"
+  },
+  {
+    "title": "Modern Web Design Principles",
+    "slug": "modern-web-design-principles",
+    "content": "<h2>Design in the Modern Web</h2><p>Web design has evolved significantly over the past decade. Today's websites need to be fast, accessible, and provide excellent user experiences across all devices.</p><h2>Key Principles</h2><h3>Mobile-First Design</h3><p>Start designing for mobile devices and progressively enhance for larger screens.</p><h3>Performance Optimization</h3><p>Optimize images, minimize HTTP requests, and use efficient CSS and JavaScript.</p><h3>Accessibility</h3><p>Ensure your website is usable by people with disabilities by following WCAG guidelines.</p><h3>User Experience</h3><p>Focus on clear navigation, intuitive interfaces, and fast loading times.</p>",
+    "publishedAt": "2024-01-08T09:15:00.000Z"
+  },
+  {
+    "title": "Content Management with Strapi",
+    "slug": "content-management-strapi",
+    "content": "<h2>What is Strapi?</h2><p>Strapi is an open-source headless CMS that gives developers the freedom to choose their favorite tools and frameworks while providing editors with an easy-to-use interface to manage content.</p><h2>Benefits of Headless CMS</h2><ul><li>API-first approach</li><li>Technology agnostic</li><li>Scalable architecture</li><li>Developer-friendly</li></ul><h2>Integration with Phoenix</h2><p>Using Strapi with Phoenix and PhoenixStatic allows you to:</p><ul><li>Manage content through a user-friendly interface</li><li>Generate static pages for optimal performance</li><li>Maintain separation between content and presentation</li></ul>",
+    "publishedAt": "2024-01-05T16:45:00.000Z"
+  }
+]

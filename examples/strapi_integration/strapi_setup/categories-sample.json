@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Technology",
+    "slug": "technology",
+    "description": "Posts about technology, programming, and software development"
+  },
+  {
+    "name": "Design",
+    "slug": "design", 
+    "description": "Articles about web design, UX/UI, and visual design"
+  },
+  {
+    "name": "Phoenix",
+    "slug": "phoenix",
+    "description": "Content specifically about the Phoenix web framework"
+  },
+  {
+    "name": "Elixir",
+    "slug": "elixir",
+    "description": "Posts about the Elixir programming language"
+  }
+]
