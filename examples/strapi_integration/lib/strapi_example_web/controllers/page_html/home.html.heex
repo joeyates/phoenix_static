@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Strapi + PhoenixStatic Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { 
+      font-family: system-ui, sans-serif; 
+      line-height: 1.6; 
+      max-width: 800px; 
+      margin: 0 auto; 
+      padding: 2rem; 
+      background: #fafafa;
+    }
+    .hero { 
+      text-align: center; 
+      margin-bottom: 3rem; 
+      padding: 2rem; 
+      background: white; 
+      border-radius: 8px; 
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .features { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+      gap: 1.5rem; 
+      margin-bottom: 3rem;
+    }
+    .feature { 
+      background: white; 
+      padding: 1.5rem; 
+      border-radius: 8px; 
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .cta { 
+      text-align: center; 
+      padding: 2rem; 
+      background: #3b82f6; 
+      color: white; 
+      border-radius: 8px;
+    }
+    a { 
+      color: #3b82f6; 
+      text-decoration: none; 
+    }
+    a:hover { 
+      text-decoration: underline; 
+    }
+    .cta a { 
+      color: white; 
+      font-weight: bold; 
+      font-size: 1.125rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <h1>Strapi + PhoenixStatic Example</h1>
+    <p>A demonstration of how to use PhoenixStatic with Strapi CMS to generate static blog pages.</p>
+  </div>
+
+  <div class="features">
+    <div class="feature">
+      <h3>Static Generation</h3>
+      <p>Blog content is fetched from Strapi CMS at compile time and converted into static HTML pages for optimal performance.</p>
+    </div>
+    
+    <div class="feature">
+      <h3>Content Management</h3>
+      <p>Manage your blog posts and categories through Strapi's user-friendly admin interface.</p>
+    </div>
+    
+    <div class="feature">
+      <h3>Phoenix Integration</h3>
+      <p>Seamlessly integrates with Phoenix applications using the PhoenixStatic library.</p>
+    </div>
+  </div>
+
+  <div class="cta">
+    <h2>Explore the Blog</h2>
+    <p>Check out the statically generated blog pages powered by Strapi CMS.</p>
+    <a href="/blog">Visit Blog →</a>
+  </div>
+</body>
+</html>
