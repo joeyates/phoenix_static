@@ -1,10 +1,10 @@
-defmodule StrapiWeb.PageHTML do
+defmodule StrapiExampleWeb.PageHTML do
   @moduledoc """
   This module contains pages rendered by PageController.
 
   See the `page_html` directory for all templates available.
   """
-  use StrapiWeb, :html
+  use StrapiExampleWeb, :html
 
   embed_templates "page_html/*"
 end

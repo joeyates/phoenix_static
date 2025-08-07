@@ -1,5 +1,5 @@
-defmodule StrapiWeb.PageControllerTest do
-  use StrapiWeb.ConnCase
+defmodule StrapiExampleWeb.PageControllerTest do
+  use StrapiExampleWeb.ConnCase
 
   test "GET /", %{conn: conn} do
     conn = get(conn, ~p"/")

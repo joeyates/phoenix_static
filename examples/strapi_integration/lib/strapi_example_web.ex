@@ -1,12 +1,12 @@
-defmodule StrapiWeb do
+defmodule StrapiExampleWeb do
   @moduledoc """
   The entrypoint for defining your web interface, such
   as controllers, components, channels, and so on.
 
   This can be used in your application as:
 
-      use StrapiWeb, :controller
-      use StrapiWeb, :html
+      use StrapiExampleWeb, :controller
+      use StrapiExampleWeb, :html
 
   The definitions below will be executed for every controller,
   component, etc, so keep them short and clean, focused
@@ -33,7 +33,6 @@ defmodule StrapiWeb do
   def channel do
     quote do
       use Phoenix.Channel
-      import StrapiWeb.Gettext
     end
   end
 
@@ -41,10 +40,9 @@ defmodule StrapiWeb do
     quote do
       use Phoenix.Controller,
         formats: [:html, :json],
-        layouts: [html: StrapiWeb.Layouts]
+        layouts: [html: StrapiExampleWeb.Layouts]
 
       import Plug.Conn
-      import StrapiWeb.Gettext
 
       unquote(verified_routes())
     end
@@ -53,7 +51,7 @@ defmodule StrapiWeb do
   def live_view do
     quote do
       use Phoenix.LiveView,
-        layout: {StrapiWeb.Layouts, :app}
+        layout: {StrapiExampleWeb.Layouts, :app}
 
       unquote(html_helpers())
     end
@@ -84,9 +82,8 @@ defmodule StrapiWeb do
     quote do
       # HTML escaping functionality
       import Phoenix.HTML
-      # Core UI components and translation
-      import StrapiWeb.CoreComponents
-      import StrapiWeb.Gettext
+      # Core UI components
+      import StrapiExampleWeb.CoreComponents
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS
@@ -99,9 +96,9 @@ defmodule StrapiWeb do
   def verified_routes do
     quote do
       use Phoenix.VerifiedRoutes,
-        endpoint: StrapiWeb.Endpoint,
-        router: StrapiWeb.Router,
-        statics: StrapiWeb.static_paths()
+        endpoint: StrapiExampleWeb.Endpoint,
+        router: StrapiExampleWeb.Router,
+        statics: StrapiExampleWeb.static_paths()
     end
   end
 

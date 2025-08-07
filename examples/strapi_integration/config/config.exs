@@ -8,14 +8,14 @@
 import Config
 
 # Configures the endpoint
-config :strapi, StrapiWeb.Endpoint,
+config :strapi_example, StrapiExampleWeb.Endpoint,
   url: [host: "localhost"],
   adapter: Bandit.PhoenixAdapter,
   render_errors: [
-    formats: [html: StrapiWeb.ErrorHTML, json: StrapiWeb.ErrorJSON],
+    formats: [html: StrapiExampleWeb.ErrorHTML, json: StrapiExampleWeb.ErrorJSON],
     layout: false
   ],
-  pubsub_server: Strapi.PubSub,
+  pubsub_server: StrapiExample.PubSub,
   live_view: [signing_salt: "j6Gh6Bpz"]
 
 # Configures Elixir's Logger
@@ -25,11 +25,6 @@ config :logger, :console,
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
-
-# Strapi configuration
-config :strapi,
-  strapi_url: System.get_env("STRAPI_URL", "http://localhost:1337"),
-  strapi_api_key: System.get_env("STRAPI_API_KEY")
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

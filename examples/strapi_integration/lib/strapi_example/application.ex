@@ -1,4 +1,4 @@
-defmodule Strapi.Application do
+defmodule StrapiExample.Application do
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   @moduledoc false
@@ -8,20 +8,15 @@ defmodule Strapi.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      StrapiWeb.Telemetry,
-      {DNSCluster, query: Application.get_env(:strapi, :dns_cluster_query) || :ignore},
-      {Phoenix.PubSub, name: Strapi.PubSub},
-      # Start the Finch HTTP client for sending emails
-      {Finch, name: Strapi.Finch},
-      # Start a worker by calling: Strapi.Worker.start_link(arg)
-      # {Strapi.Worker, arg},
+      {DNSCluster, query: Application.get_env(:strapi_example, :dns_cluster_query) || :ignore},
+      {Phoenix.PubSub, name: StrapiExample.PubSub},
       # Start to serve requests, typically the last entry
-      StrapiWeb.Endpoint
+      StrapiExampleWeb.Endpoint
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: Strapi.Supervisor]
+    opts = [strategy: :one_for_one, name: StrapiExample.Supervisor]
     Supervisor.start_link(children, opts)
   end
 
@@ -29,7 +24,7 @@ defmodule Strapi.Application do
   # whenever the application is updated.
   @impl true
   def config_change(changed, _new, removed) do
-    StrapiWeb.Endpoint.config_change(changed, removed)
+    StrapiExampleWeb.Endpoint.config_change(changed, removed)
     :ok
   end
 end

@@ -1,10 +1,10 @@
-defmodule StrapiWeb.StrapiSourceTest do
+defmodule StrapiExample.Strapi.PostsSourceTest do
   use ExUnit.Case
-  alias StrapiWeb.StrapiSource
+  alias StrapiExample.Strapi.PostsSource
 
   describe "last_modified/0" do
     test "returns a unix timestamp" do
-      assert {:ok, timestamp} = StrapiSource.last_modified()
+      assert {:ok, timestamp} = PostsSource.last_modified()
       assert is_integer(timestamp)
       assert timestamp > 0
     end
@@ -13,7 +13,7 @@ defmodule StrapiWeb.StrapiSourceTest do
   describe "list_pages/0" do
     test "returns fallback pages when API is unavailable" do
       # With the default test configuration pointing to localhost:9999 (unavailable)
-      assert {:ok, pages} = StrapiSource.list_pages()
+      assert {:ok, pages} = PostsSource.list_pages()
       assert is_list(pages)
       assert length(pages) >= 1
       

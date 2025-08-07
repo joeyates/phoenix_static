@@ -1,6 +1,6 @@
-defmodule StrapiWeb.StrapiSource do
+defmodule StrapiExample.Strapi.PostsSource do
   @moduledoc """
-  A PhoenixStatic source module that fetches content from Strapi CMS.
+  A PhoenixStatic source module that fetches posts and categories from Strapi CMS.
   
   This module demonstrates how to:
   - Fetch Posts and Categories from Strapi REST API
@@ -45,7 +45,7 @@ defmodule StrapiWeb.StrapiSource do
   # Private functions
 
   defp fetch_posts() do
-    url = "#{strapi_url()}/api/posts?populate=category"
+    url = "#{strapi_url()}/api/posts?populate=categories"
     
     case Req.get(url, headers: headers()) do
       {:ok, %Req.Response{status: 200, body: body}} ->
@@ -77,7 +77,7 @@ defmodule StrapiWeb.StrapiSource do
   end
 
   defp fetch_last_modified() do
-    # Try to get the latest post's updated timestamp
+    # Try to get the latest post's updated timestamp (UNIX timestamp)
     url = "#{strapi_url()}/api/posts?sort=updatedAt:desc&pagination[limit]=1"
     
     case Req.get(url, headers: headers()) do
@@ -103,16 +103,23 @@ defmodule StrapiWeb.StrapiSource do
       %{"id" => id, "attributes" => attributes} = post
       %{"title" => title, "content" => content, "slug" => slug} = attributes
       
-      category_name = case get_in(post, ["attributes", "category", "data", "attributes", "name"]) do
-        nil -> "Uncategorized"
-        name -> name
+      category_names = case get_in(post, ["attributes", "categories", "data"]) do
+        nil -> []
+        [] -> []
+        categories -> Enum.map(categories, fn cat -> get_in(cat, ["attributes", "name"]) end)
+      end
+
+      category_text = if Enum.empty?(category_names) do
+        "Uncategorized"
+      else
+        Enum.join(category_names, ", ")
       end
 
       html_content = """
       <article class="post">
         <header>
           <h1>#{Phoenix.HTML.html_escape(title)}</h1>
-          <p class="category">Category: #{Phoenix.HTML.html_escape(category_name)}</p>
+          <p class="category">Categories: #{Phoenix.HTML.html_escape(category_text)}</p>
         </header>
         <div class="content">
           #{content}
@@ -138,9 +145,10 @@ defmodule StrapiWeb.StrapiSource do
 
       # Filter posts for this category
       category_posts = Enum.filter(posts, fn post ->
-        case get_in(post, ["attributes", "category", "data", "id"]) do
-          ^category_id -> true
-          _ -> false
+        case get_in(post, ["attributes", "categories", "data"]) do
+          nil -> false
+          [] -> false
+          categories -> Enum.any?(categories, fn cat -> get_in(cat, ["id"]) == category_id end)
         end
       end)
 
@@ -185,11 +193,17 @@ defmodule StrapiWeb.StrapiSource do
                    |> Enum.take(10)
                    |> Enum.map(fn post ->
                      %{"attributes" => %{"title" => title, "slug" => slug}} = post
-                     category_name = case get_in(post, ["attributes", "category", "data", "attributes", "name"]) do
-                       nil -> "Uncategorized"
-                       name -> name
+                     category_names = case get_in(post, ["attributes", "categories", "data"]) do
+                       nil -> []
+                       [] -> []
+                       categories -> Enum.map(categories, fn cat -> get_in(cat, ["attributes", "name"]) end)
                      end
-                     "<li><a href=\"/posts/#{slug}\">#{Phoenix.HTML.html_escape(title)}</a> <span class=\"category\">(#{Phoenix.HTML.html_escape(category_name)})</span></li>"
+                     category_text = if Enum.empty?(category_names) do
+                       "Uncategorized"
+                     else
+                       Enum.join(category_names, ", ")
+                     end
+                     "<li><a href=\"/posts/#{slug}\">#{Phoenix.HTML.html_escape(title)}</a> <span class=\"category\">(#{Phoenix.HTML.html_escape(category_text)})</span></li>"
                    end)
                    |> Enum.join("\n")
 
@@ -247,7 +261,7 @@ defmodule StrapiWeb.StrapiSource do
   end
 
   defp strapi_url() do
-    Application.get_env(:strapi, :strapi_url)
+    Application.get_env(:strapi_example, :strapi_url)
   end
 
   defp headers() do
@@ -263,6 +277,6 @@ defmodule StrapiWeb.StrapiSource do
   end
   
   defp strapi_api_key() do
-    Application.get_env(:strapi, :strapi_api_key)
+    Application.get_env(:strapi_example, :strapi_api_key)
   end
 end

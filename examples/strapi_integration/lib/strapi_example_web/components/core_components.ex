@@ -1,4 +1,4 @@
-defmodule StrapiWeb.CoreComponents do
+defmodule StrapiExampleWeb.CoreComponents do
   @moduledoc """
   Provides core UI components.
 

@@ -8,15 +8,15 @@ This example shows how to:
 
 - **Fetch content from Strapi REST API** using Req HTTP client
 - **Generate static pages** for blog posts, categories, and blog index
-- **Handle relationships** between content types (Posts ↔ Categories)
+- **Handle relationships** between content types (Posts have many Categories)
 - **Implement proper error handling** and fallbacks for API failures
 - **Configure environment-based** Strapi API URLs and API keys
-- **Track last modification times** for efficient recompilation
+- **Track last modification times** for efficient recompilation (UNIX timestamps)
 
 ## Features Demonstrated
 
 ### Content Types
-- **Posts**: Blog posts with title, content, slug, publication date, and category relationship
+- **Posts**: Blog posts with title, content, slug, publication date, and category relationships
 - **Categories**: Blog categories with name, slug, and description
 
 ### Generated Pages
@@ -26,21 +26,18 @@ This example shows how to:
 - **Home page** at `/` with example documentation
 
 ### Phoenix Static Integration
-- **Source Module**: `StrapiWeb.StrapiSource` implements `PhoenixStatic.Source` behavior
-- **Controller**: `StrapiWeb.BlogController` uses `PhoenixStatic.Controller`
-- **View**: `StrapiWeb.BlogHTML` uses `PhoenixStatic.View`
+- **Source Module**: `StrapiExample.Strapi.PostsSource` implements `PhoenixStatic.Source` behavior
+- **Controller**: `StrapiExampleWeb.BlogController` uses `PhoenixStatic.Controller`
+- **View**: `StrapiExampleWeb.BlogHTML` uses `PhoenixStatic.View`
 - **Routes**: Automatically generated using `PhoenixStatic.Routes`
 
 ## Prerequisites
 
 ### Strapi CMS Setup
 
-1. **Install Strapi** (requires Node.js):
-   ```bash
-   npx create-strapi-app@latest my-strapi-project --quickstart
-   ```
+1. **Set up an online Strapi instance** (e.g., using Strapi Cloud, Railway, Heroku, or your own VPS):
 
-2. **Create Content Types** in Strapi Admin Panel (`http://localhost:1337/admin`):
+2. **Create Content Types** in Strapi Admin Panel:
 
    **Categories Collection:**
    - `name` (Text, required)
@@ -52,12 +49,13 @@ This example shows how to:
    - `slug` (UID, required, target field: title)
    - `content` (Rich text, required)
    - `publishedAt` (Date)
-   - `category` (Relation: Posts belongs to one Category)
+   - `categories` (Relation: Posts has many Categories)
 
-3. **Set Permissions** in Strapi Admin:
+3. **Set API Permissions** in Strapi Admin:
    - Go to Settings → Users & Permissions Plugin → Roles → Public
-   - Enable `find` and `findOne` for both Categories and Posts
-   - Save the settings
+   - **Disable** all public permissions (the API should not be public)
+   - Create an API token for private access: Settings → API Tokens → Create new API Token
+   - Set token type to "Read-only" and save the token value
 
 4. **Add Sample Content**:
    - Create a few categories (e.g., "Technology", "Tutorial")
@@ -76,22 +74,15 @@ This example shows how to:
    mix deps.get
    ```
 
-3. **Configure Strapi URL and API Key**:
+3. **Configure Environment Variables**:
    ```bash
-   export STRAPI_URL=http://localhost:1337
-   export STRAPI_API_KEY=your_api_key_here  # Optional, for private APIs
-   # Or set in config/dev.exs or config/runtime.exs
+   export STRAPI_URL=https://your-strapi-instance.com
+   export STRAPI_API_KEY=your_api_key_here
    ```
-
-   **Note**: The API key is optional. If not provided, the integration will make public API calls. To generate an API key in Strapi, go to Settings > API Tokens in your Strapi admin panel.
 
 ## Running the Example
 
-1. **Start your Strapi CMS**:
-   ```bash
-   # In your Strapi project directory
-   npm run develop
-   ```
+1. **Ensure your online Strapi CMS is running** with the configured content types and API token.
 
 2. **Start the Phoenix server**:
    ```bash
@@ -107,9 +98,9 @@ This example shows how to:
 
 ## Architecture Details
 
-### Source Module (`StrapiSource`)
+### Source Module (`PostsSource`)
 
-The `StrapiWeb.StrapiSource` module implements the `PhoenixStatic.Source` behavior:
+The `StrapiExample.Strapi.PostsSource` module (located in `lib/strapi_example/strapi/posts_source.ex`) implements the `PhoenixStatic.Source` behavior:
 
 ```elixir
 @behaviour PhoenixStatic.Source
@@ -122,18 +113,18 @@ end
 
 @impl true  
 def last_modified() do
-  # Returns timestamp of most recently updated content
+  # Returns UNIX timestamp of most recently updated content
   # Used for efficient recompilation
 end
 ```
 
 ### API Integration
 
-The module makes HTTP requests to Strapi's REST API:
+The module makes HTTP requests to Strapi's REST API using required authentication:
 
-- `GET /api/posts?populate=category` - Fetch posts with category data
+- `GET /api/posts?populate=categories` - Fetch posts with category data
 - `GET /api/categories` - Fetch all categories
-- `GET /api/posts?sort=updatedAt:desc&pagination[limit]=1` - Get last modified timestamp
+- `GET /api/posts?sort=updatedAt:desc&pagination[limit]=1` - Get last modified UNIX timestamp
 
 ### Page Generation
 
@@ -152,25 +143,29 @@ The implementation includes comprehensive error handling:
 - **Data Validation**: Safe handling of missing or malformed data
 - **Timestamp Handling**: Fallback to current time if unable to determine last modified
 
-### Configuration
+### Environment Configuration
 
-Environment-based configuration for flexibility:
+Environment variables are read in `config/runtime.exs`:
 
 ```elixir
-# config/config.exs
-config :phoenix_static_strapi_example,
-  strapi_url: System.get_env("STRAPI_URL", "http://localhost:1337")
-
 # config/runtime.exs
-config :phoenix_static_strapi_example,
-  strapi_url: System.get_env("STRAPI_URL") || "http://localhost:1337"
+strapi_url = case System.get_env("STRAPI_URL") do
+  nil -> raise "environment variable STRAPI_URL is missing"
+  url -> url
+end
+
+strapi_api_key = System.get_env("STRAPI_API_KEY")
+
+config :strapi_example,
+  strapi_url: strapi_url,
+  strapi_api_key: strapi_api_key
 ```
 
 ## Strapi API Structure
 
 ### Expected Strapi Response Format
 
-**Posts API Response** (`/api/posts?populate=category`):
+**Posts API Response** (`/api/posts?populate=categories`):
 ```json
 {
   "data": [
@@ -182,14 +177,23 @@ config :phoenix_static_strapi_example,
         "content": "<p>Post content here...</p>",
         "publishedAt": "2024-01-15T10:00:00.000Z",
         "updatedAt": "2024-01-15T10:00:00.000Z",
-        "category": {
-          "data": {
-            "id": 1,
-            "attributes": {
-              "name": "Technology",
-              "slug": "technology"
+        "categories": {
+          "data": [
+            {
+              "id": 1,
+              "attributes": {
+                "name": "Technology",
+                "slug": "technology"
+              }
+            },
+            {
+              "id": 2,
+              "attributes": {
+                "name": "Tutorial",
+                "slug": "tutorial"
+              }
             }
-          }
+          ]
         }
       }
     }
@@ -217,33 +221,17 @@ config :phoenix_static_strapi_example,
 
 ### Adding New Content Types
 
-1. **Create the content type** in Strapi
-2. **Add API calls** in `StrapiSource.fetch_*` functions
-3. **Generate pages** in `StrapiSource.generate_*_pages` functions
-4. **Update last_modified** logic if needed
+For each new content type, you must create:
+
+1. **New source module** in `lib/strapi_example/strapi/` (e.g., `EventsSource` for events)
+2. **New controller** using `PhoenixStatic.Controller`
+3. **New view** using `PhoenixStatic.View` pointing to the new source module
+4. **Update routes** to include the new controller
 
 ### Styling and Layout
 
-- **CSS**: Add styles to `home.html.heex` or create separate CSS files
-- **Templates**: Modify page generation in `StrapiSource` for custom HTML
+- **Templates**: Modify page generation in source modules for custom HTML
 - **Layout**: Update Phoenix layout files for different page structures
-
-### API Authentication
-
-For production deployments with authentication:
-
-```elixir
-defp headers() do
-  [
-    {"Content-Type", "application/json"},
-    {"Accept", "application/json"},
-    {"Authorization", "Bearer #{api_token()}"}
-  ]
-end
-
-defp api_token() do
-  Application.get_env(:phoenix_static_strapi_example, :strapi_api_token)
-end
 ```
 
 ## Production Deployment
@@ -278,14 +266,14 @@ The static pages are generated at compile time:
 
 ### Common Issues
 
-1. **Connection refused**: Ensure Strapi is running on the configured URL
-2. **Empty pages**: Check Strapi permissions for public access
-3. **Content not updating**: Verify `last_modified/0` returns correct timestamp
+1. **Connection refused**: Ensure your online Strapi instance is accessible and running
+2. **Authentication errors**: Verify the `STRAPI_API_KEY` environment variable is set correctly
+3. **Content not updating**: Verify `last_modified/0` returns correct UNIX timestamp
 4. **Build failures**: Check Strapi API response format matches expected structure
 
 ### Debug Mode
 
-Enable detailed logging:
+Enable detailed logging in `config/dev.exs`:
 
 ```elixir
 # config/dev.exs
@@ -301,7 +289,7 @@ mix compile --verbose
 
 - [Phoenix Static Library](../../README.md)
 - [Strapi Documentation](https://docs.strapi.io/)
-- [HTTPoison Documentation](https://hexdocs.pm/httpoison/)
+- [Req HTTP Client](https://hexdocs.pm/req/)
 - [Phoenix Framework](https://phoenixframework.org/)
 
 ## License

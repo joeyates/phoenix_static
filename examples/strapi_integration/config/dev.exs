@@ -2,7 +2,7 @@ import Config
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
-config :strapi, StrapiWeb.Endpoint,
+config :strapi_example, StrapiExampleWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
   http: [ip: {127, 0, 0, 1}, port: 4000],
@@ -12,17 +12,17 @@ config :strapi, StrapiWeb.Endpoint,
   secret_key_base: "eCM9MJfvb+T6TXdK6sRxqBCQjkkm5TL6jbLp7a8KjTHG6XmKQcJrJjZKs4R8D7qe"
 
 # Watch static and templates for browser reloading.
-config :strapi, StrapiWeb.Endpoint,
+config :strapi_example, StrapiExampleWeb.Endpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/strapi_web/(controllers|live|components)/.*(ex|heex)$"
+      ~r"lib/strapi_example_web/(controllers|live|components)/.*(ex|heex)$"
     ]
   ]
 
 # Enable dev routes for dashboard and mailbox
-config :strapi, dev_routes: true
+config :strapi_example, dev_routes: true
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"

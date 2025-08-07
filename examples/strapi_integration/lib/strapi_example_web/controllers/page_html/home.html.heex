@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="csrf-token" content={get_csrf_token()} />
+    <title>Phoenix Static Strapi Example</title>
+  </head>
+  <body>
+    <div class="header">
+      <h1>Phoenix Static + Strapi CMS Example</h1>
+      <nav class="nav">
+        <a href="/">Home</a>
+        <a href="/blog">Blog</a>
+      </nav>
+    </div>
+    
+    <main class="content">
+      <section class="intro">
+        <h2>Welcome!</h2>
+        <p>This is a demonstration of how to use <strong>phoenix_static</strong> with Strapi CMS as a content source.</p>
+        <p>This example shows how to:</p>
+        <ul>
+          <li>Fetch content from a Strapi REST API</li>
+          <li>Generate static pages for blog posts and categories</li>
+          <li>Handle relationships between content types</li>
+          <li>Implement proper error handling and fallbacks</li>
+        </ul>
+        <p><a href="/blog">Visit the blog →</a></p>
+      </section>
+      
+      <section class="setup">
+        <h2>Setup Instructions</h2>
+        <p>To run this example:</p>
+        <ol>
+          <li>Set up a Strapi CMS instance with Posts and Categories collections</li>
+          <li>Configure the <code>STRAPI_URL</code> environment variable</li>
+          <li>Run <code>mix deps.get</code> to install dependencies</li>
+          <li>Start the Phoenix server with <code>mix phx.server</code></li>
+        </ol>
+        <p>See the README for detailed setup instructions.</p>
+      </section>
+    </main>
+  </body>
+</html>

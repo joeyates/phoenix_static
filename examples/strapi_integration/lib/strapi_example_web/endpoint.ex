@@ -1,12 +1,12 @@
-defmodule StrapiWeb.Endpoint do
-  use Phoenix.Endpoint, otp_app: :strapi
+defmodule StrapiExampleWeb.Endpoint do
+  use Phoenix.Endpoint, otp_app: :strapi_example
 
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
   # Set :encryption_salt if you would also like to encrypt it.
   @session_options [
     store: :cookie,
-    key: "_strapi_key",
+    key: "_strapi_example_key",
     signing_salt: "JKx5xHYA",
     same_site: "Lax"
   ]
@@ -21,9 +21,9 @@ defmodule StrapiWeb.Endpoint do
   # when deploying your static files in production.
   plug Plug.Static,
     at: "/",
-    from: :strapi,
+    from: :strapi_example,
     gzip: false,
-    only: StrapiWeb.static_paths()
+    only: StrapiExampleWeb.static_paths()
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
@@ -34,12 +34,7 @@ defmodule StrapiWeb.Endpoint do
 
   end
 
-  plug Phoenix.LiveDashboard.RequestLogger,
-    param_key: "request_logger",
-    cookie_key: "request_logger"
-
   plug Plug.RequestId
-  plug Plug.Telemetry, event_prefix: [:phoenix, :endpoint]
 
   plug Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
@@ -49,5 +44,5 @@ defmodule StrapiWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
-  plug StrapiWeb.Router
+  plug StrapiExampleWeb.Router
 end
