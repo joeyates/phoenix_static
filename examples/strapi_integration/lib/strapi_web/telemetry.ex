@@ -42,7 +42,7 @@ defmodule StrapiWeb.Telemetry do
     [
       # A module, function and arguments to be invoked periodically.
       # This function must call :telemetry.execute/3 and a metric must be added above.
-      # {PhoenixStaticStrapiExampleWeb, :count_users, []}
+      # {StrapiWeb, :count_users, []}
     ]
   end
 end

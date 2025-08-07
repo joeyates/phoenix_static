@@ -21,9 +21,9 @@ defmodule StrapiWeb.Endpoint do
   # when deploying your static files in production.
   plug Plug.Static,
     at: "/",
-    from: :phoenix_static_strapi_example,
+    from: :strapi,
     gzip: false,
-    only: PhoenixStaticStrapiExampleWeb.static_paths()
+    only: StrapiWeb.static_paths()
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
@@ -49,5 +49,5 @@ defmodule StrapiWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
-  plug PhoenixStaticStrapiExampleWeb.Router
+  plug StrapiWeb.Router
 end

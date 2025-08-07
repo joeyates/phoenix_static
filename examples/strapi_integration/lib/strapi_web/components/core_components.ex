@@ -17,7 +17,7 @@ defmodule StrapiWeb.CoreComponents do
   use Phoenix.Component
 
   alias Phoenix.LiveView.JS
-  import PhoenixStaticStrapiExampleWeb.Gettext
+  import StrapiWeb.Gettext
 
   @doc """
   Renders a modal.
@@ -655,9 +655,9 @@ defmodule StrapiWeb.CoreComponents do
     # with our gettext backend as first argument. Translations are
     # available in the errors.po file (as we use the "errors" domain).
     if count = opts[:count] do
-      Gettext.dngettext(PhoenixStaticStrapiExampleWeb.Gettext, "errors", msg, msg, count, opts)
+      Gettext.dngettext(StrapiWeb.Gettext, "errors", msg, msg, count, opts)
     else
-      Gettext.dgettext(PhoenixStaticStrapiExampleWeb.Gettext, "errors", msg, opts)
+      Gettext.dgettext(StrapiWeb.Gettext, "errors", msg, opts)
     end
   end
 

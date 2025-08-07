@@ -6,11 +6,11 @@ This example demonstrates how to use `phoenix_static` with Strapi CMS as a conte
 
 This example shows how to:
 
-- **Fetch content from Strapi REST API** using HTTPoison
+- **Fetch content from Strapi REST API** using Req HTTP client
 - **Generate static pages** for blog posts, categories, and blog index
 - **Handle relationships** between content types (Posts ↔ Categories)
 - **Implement proper error handling** and fallbacks for API failures
-- **Configure environment-based** Strapi API URLs
+- **Configure environment-based** Strapi API URLs and API keys
 - **Track last modification times** for efficient recompilation
 
 ## Features Demonstrated
@@ -26,9 +26,9 @@ This example shows how to:
 - **Home page** at `/` with example documentation
 
 ### Phoenix Static Integration
-- **Source Module**: `PhoenixStaticStrapiExampleWeb.StrapiSource` implements `PhoenixStatic.Source` behavior
-- **Controller**: `PhoenixStaticStrapiExampleWeb.BlogController` uses `PhoenixStatic.Controller`
-- **View**: `PhoenixStaticStrapiExampleWeb.BlogHTML` uses `PhoenixStatic.View`
+- **Source Module**: `StrapiWeb.StrapiSource` implements `PhoenixStatic.Source` behavior
+- **Controller**: `StrapiWeb.BlogController` uses `PhoenixStatic.Controller`
+- **View**: `StrapiWeb.BlogHTML` uses `PhoenixStatic.View`
 - **Routes**: Automatically generated using `PhoenixStatic.Routes`
 
 ## Prerequisites
@@ -76,11 +76,14 @@ This example shows how to:
    mix deps.get
    ```
 
-3. **Configure Strapi URL** (default: `http://localhost:1337`):
+3. **Configure Strapi URL and API Key**:
    ```bash
    export STRAPI_URL=http://localhost:1337
+   export STRAPI_API_KEY=your_api_key_here  # Optional, for private APIs
    # Or set in config/dev.exs or config/runtime.exs
    ```
+
+   **Note**: The API key is optional. If not provided, the integration will make public API calls. To generate an API key in Strapi, go to Settings > API Tokens in your Strapi admin panel.
 
 ## Running the Example
 
@@ -106,7 +109,7 @@ This example shows how to:
 
 ### Source Module (`StrapiSource`)
 
-The `PhoenixStaticStrapiExampleWeb.StrapiSource` module implements the `PhoenixStatic.Source` behavior:
+The `StrapiWeb.StrapiSource` module implements the `PhoenixStatic.Source` behavior:
 
 ```elixir
 @behaviour PhoenixStatic.Source
