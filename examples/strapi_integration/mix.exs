@@ -1,9 +1,9 @@
-defmodule PhoenixStaticStrapiExample.MixProject do
+defmodule Strapi.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :phoenix_static_strapi_example,
+      app: :strapi,
       version: "0.1.0",
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -18,7 +18,7 @@ defmodule PhoenixStaticStrapiExample.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {PhoenixStaticStrapiExample.Application, []},
+      mod: {Strapi.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
@@ -44,7 +44,7 @@ defmodule PhoenixStaticStrapiExample.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.0"},
-      {:httpoison, "~> 2.0"},
+      {:req, "~> 0.4.0"},
       {:phoenix_static, path: "../.."}
     ]
   end

@@ -1,6 +1,6 @@
-defmodule PhoenixStaticStrapiExample do
+defmodule Strapi do
   @moduledoc """
-  PhoenixStaticStrapiExample keeps the contexts that define your domain
+  Strapi keeps the contexts that define your domain
   and business logic.
 
   Contexts are also responsible for managing your data, regardless

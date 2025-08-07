@@ -1,12 +1,12 @@
-defmodule PhoenixStaticStrapiExampleWeb do
+defmodule StrapiWeb do
   @moduledoc """
   The entrypoint for defining your web interface, such
   as controllers, components, channels, and so on.
 
   This can be used in your application as:
 
-      use PhoenixStaticStrapiExampleWeb, :controller
-      use PhoenixStaticStrapiExampleWeb, :html
+      use StrapiWeb, :controller
+      use StrapiWeb, :html
 
   The definitions below will be executed for every controller,
   component, etc, so keep them short and clean, focused
@@ -33,7 +33,7 @@ defmodule PhoenixStaticStrapiExampleWeb do
   def channel do
     quote do
       use Phoenix.Channel
-      import PhoenixStaticStrapiExampleWeb.Gettext
+      import StrapiWeb.Gettext
     end
   end
 
@@ -41,10 +41,10 @@ defmodule PhoenixStaticStrapiExampleWeb do
     quote do
       use Phoenix.Controller,
         formats: [:html, :json],
-        layouts: [html: PhoenixStaticStrapiExampleWeb.Layouts]
+        layouts: [html: StrapiWeb.Layouts]
 
       import Plug.Conn
-      import PhoenixStaticStrapiExampleWeb.Gettext
+      import StrapiWeb.Gettext
 
       unquote(verified_routes())
     end
@@ -53,7 +53,7 @@ defmodule PhoenixStaticStrapiExampleWeb do
   def live_view do
     quote do
       use Phoenix.LiveView,
-        layout: {PhoenixStaticStrapiExampleWeb.Layouts, :app}
+        layout: {StrapiWeb.Layouts, :app}
 
       unquote(html_helpers())
     end
@@ -85,8 +85,8 @@ defmodule PhoenixStaticStrapiExampleWeb do
       # HTML escaping functionality
       import Phoenix.HTML
       # Core UI components and translation
-      import PhoenixStaticStrapiExampleWeb.CoreComponents
-      import PhoenixStaticStrapiExampleWeb.Gettext
+      import StrapiWeb.CoreComponents
+      import StrapiWeb.Gettext
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS
@@ -99,9 +99,9 @@ defmodule PhoenixStaticStrapiExampleWeb do
   def verified_routes do
     quote do
       use Phoenix.VerifiedRoutes,
-        endpoint: PhoenixStaticStrapiExampleWeb.Endpoint,
-        router: PhoenixStaticStrapiExampleWeb.Router,
-        statics: PhoenixStaticStrapiExampleWeb.static_paths()
+        endpoint: StrapiWeb.Endpoint,
+        router: StrapiWeb.Router,
+        statics: StrapiWeb.static_paths()
     end
   end
 

@@ -1,4 +1,4 @@
-defmodule PhoenixStaticStrapiExampleWeb.StrapiSource do
+defmodule StrapiWeb.StrapiSource do
   @moduledoc """
   A PhoenixStatic source module that fetches content from Strapi CMS.
   
@@ -47,13 +47,13 @@ defmodule PhoenixStaticStrapiExampleWeb.StrapiSource do
   defp fetch_posts() do
     url = "#{strapi_url()}/api/posts?populate=category"
     
-    case HTTPoison.get(url, headers()) do
-      {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
-        case Jason.decode(body) do
-          {:ok, %{"data" => posts}} -> {:ok, posts}
-          {:error, _} = error -> error
+    case Req.get(url, headers: headers()) do
+      {:ok, %Req.Response{status: 200, body: body}} ->
+        case body do
+          %{"data" => posts} -> {:ok, posts}
+          _ -> {:error, "Invalid response format"}
         end
-      {:ok, %HTTPoison.Response{status_code: status_code}} ->
+      {:ok, %Req.Response{status: status_code}} ->
         {:error, "HTTP #{status_code}"}
       {:error, _} = error ->
         error
@@ -63,13 +63,13 @@ defmodule PhoenixStaticStrapiExampleWeb.StrapiSource do
   defp fetch_categories() do
     url = "#{strapi_url()}/api/categories"
     
-    case HTTPoison.get(url, headers()) do
-      {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
-        case Jason.decode(body) do
-          {:ok, %{"data" => categories}} -> {:ok, categories}
-          {:error, _} = error -> error
+    case Req.get(url, headers: headers()) do
+      {:ok, %Req.Response{status: 200, body: body}} ->
+        case body do
+          %{"data" => categories} -> {:ok, categories}
+          _ -> {:error, "Invalid response format"}
         end
-      {:ok, %HTTPoison.Response{status_code: status_code}} ->
+      {:ok, %Req.Response{status: status_code}} ->
         {:error, "HTTP #{status_code}"}
       {:error, _} = error ->
         error
@@ -80,18 +80,18 @@ defmodule PhoenixStaticStrapiExampleWeb.StrapiSource do
     # Try to get the latest post's updated timestamp
     url = "#{strapi_url()}/api/posts?sort=updatedAt:desc&pagination[limit]=1"
     
-    case HTTPoison.get(url, headers()) do
-      {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
-        case Jason.decode(body) do
-          {:ok, %{"data" => [%{"attributes" => %{"updatedAt" => updated_at}} | _]}} ->
+    case Req.get(url, headers: headers()) do
+      {:ok, %Req.Response{status: 200, body: body}} ->
+        case body do
+          %{"data" => [%{"attributes" => %{"updatedAt" => updated_at}} | _]} ->
             case DateTime.from_iso8601(updated_at) do
               {:ok, datetime, _} -> {:ok, DateTime.to_unix(datetime)}
               {:error, _} -> {:error, "Invalid timestamp"}
             end
-          {:ok, %{"data" => []}} ->
+          %{"data" => []} ->
             {:ok, :os.system_time(:second)}
-          {:error, _} = error ->
-            error
+          _ ->
+            {:error, "Invalid response format"}
         end
       {:error, _} = error ->
         error
@@ -247,13 +247,22 @@ defmodule PhoenixStaticStrapiExampleWeb.StrapiSource do
   end
 
   defp strapi_url() do
-    Application.get_env(:phoenix_static_strapi_example, :strapi_url)
+    Application.get_env(:strapi, :strapi_url)
   end
 
   defp headers() do
-    [
+    base_headers = [
       {"Content-Type", "application/json"},
       {"Accept", "application/json"}
     ]
+    
+    case strapi_api_key() do
+      nil -> base_headers
+      key -> [{"Authorization", "Bearer #{key}"} | base_headers]
+    end
+  end
+  
+  defp strapi_api_key() do
+    Application.get_env(:strapi, :strapi_api_key)
   end
 end
