@@ -9,10 +9,7 @@ config :phoenix_static_strapi_example, PhoenixStaticStrapiExampleWeb.Endpoint,
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "eCM9MJfvb+T6TXdK6sRxqBCQjkkm5TL6jbLp7a8KjTHG6XmKQcJrJjZKs4R8D7qe",
-  watchers: [
-    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]}
-  ]
+  secret_key_base: "eCM9MJfvb+T6TXdK6sRxqBCQjkkm5TL6jbLp7a8KjTHG6XmKQcJrJjZKs4R8D7qe"
 
 # Watch static and templates for browser reloading.
 config :phoenix_static_strapi_example, PhoenixStaticStrapiExampleWeb.Endpoint,
