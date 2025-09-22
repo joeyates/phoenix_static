@@ -83,6 +83,11 @@ Note that you need to use `:pipelines` to indicate the same pipelines you would 
 
 You can add as many controllers (and views and sources) as you like.
 
+# PHOENIX_STATIC_DISABLED
+
+You can disable the static page generation by setting the `PHOENIX_STATIC_DISABLED`
+environment variable to '1' or 'true'.
+
 # Further Information
 
 All page content is currently held in memory during compilation, so it is not

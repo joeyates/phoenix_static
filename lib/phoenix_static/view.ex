@@ -44,8 +44,12 @@ defmodule PhoenixStatic.View do
   end
 
   def content_last_modified(source) do
-    {:ok, content_last_modified} = apply(source, :last_modified, [])
-    content_last_modified
+    if PhoenixStatic.disabled?() do
+      0
+    else
+      {:ok, content_last_modified} = apply(source, :last_modified, [])
+      content_last_modified
+    end
   end
 
   defp pages_by_action(source) do
@@ -54,7 +58,11 @@ defmodule PhoenixStatic.View do
   end
 
   defp fetch_pages(source) do
-    {:ok, _pages} = apply(source, :list_pages, [])
+    if PhoenixStatic.disabled?() do
+      {:ok, []}
+    else
+      {:ok, _pages} = apply(source, :list_pages, [])
+    end
   end
 
   defp by_action(pages) do
